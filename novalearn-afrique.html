@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaLearn Afrique — Ingénierie de la Formation & Andragogie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0d;
+    --bg2: #111a14;
+    --bg3: #162019;
+    --accent: #c8f56a;
+    --accent2: #7ecb7a;
+    --gold: #e8c96a;
+    --text: #e8ede9;
+    --muted: #8a9e8d;
+    --border: #1f2e22;
+    --card: #131e16;
+    --danger: #f56a6a;
+    --white: #ffffff;
+    --font-head: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --radius: 4px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ─── PAGE SECTIONS ─── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 70px;
+    background: rgba(10,15,13,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--accent);
+    cursor: pointer;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a, .nav-links button {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: none; border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0;
+    font-family: var(--font-body);
+  }
+
+  .nav-links a:hover, .nav-links button:hover,
+  .nav-links a.active, .nav-links button.active {
+    color: var(--accent);
+  }
+
+  .nav-admin-btn {
+    background: var(--accent) !important;
+    color: var(--bg) !important;
+    padding: 8px 18px !important;
+    border-radius: 2px !important;
+    font-weight: 700 !important;
+  }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: 0.3s; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 100px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 70% 50%, rgba(200,245,106,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(126,203,122,0.05) 0%, transparent 50%);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,245,106,0.1);
+    border: 1px solid rgba(200,245,106,0.3);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-family: var(--font-mono);
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 580px;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 14px 32px;
+    border: none; border-radius: 2px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* ─── STATS BAND ─── */
+  .stats-band {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 5%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .stat-item {}
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 6px;
+  }
+
+  /* ─── SECTION COMMONS ─── */
+  section { padding: 6rem 5%; }
+
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 em { font-style: italic; color: var(--accent); }
+
+  .section-intro { font-size: 1.05rem; color: var(--muted); max-width: 600px; line-height: 1.8; }
+
+  /* ─── WHY US ─── */
+  #why { background: var(--bg2); }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+
+  .why-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+
+  .why-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    transition: 0.2s;
+  }
+
+  .why-item:hover { background: var(--bg3); transform: translateX(4px); }
+
+  .why-icon {
+    width: 36px; height: 36px;
+    background: rgba(200,245,106,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+
+  .why-text strong { display: block; color: var(--white); font-size: 0.95rem; margin-bottom: 4px; }
+  .why-text span { font-size: 0.85rem; color: var(--muted); }
+
+  .why-principles { display: flex; flex-direction: column; gap: 1rem; }
+
+  .principle {
+    display: flex; align-items: center; gap: 14px;
+    padding: 1rem 1.2rem;
+    background: rgba(200,245,106,0.05);
+    border: 1px solid rgba(200,245,106,0.2);
+    border-radius: var(--radius);
+  }
+
+  .principle-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .principle span { font-size: 0.9rem; color: var(--text); }
+
+  /* ─── SERVICES ─── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  .service-card:hover::before { width: 100%; }
+  .service-card:hover { border-color: rgba(200,245,106,0.3); transform: translateY(-4px); }
+
+  .service-num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .service-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    color: var(--white);
+    margin-bottom: 0.8rem;
+  }
+
+  .service-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+  .service-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1.2rem; }
+
+  .stag {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    background: rgba(200,245,106,0.08);
+    border: 1px solid rgba(200,245,106,0.2);
+    border-radius: 12px;
+    color: var(--accent2);
+    font-family: var(--font-mono);
+  }
+
+  /* ─── VALUES ─── */
+  #values { background: var(--bg2); }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .value-card {
+    padding: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+    transition: 0.3s;
+  }
+
+  .value-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+  .value-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+  .value-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+  }
+
+  .value-card p { font-size: 0.88rem; color: var(--muted); }
+
+  /* ─── ABOUT ─── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: start;
+    margin-top: 3rem;
+  }
+
+  .about-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  .about-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .about-card li { font-size: 0.9rem; color: var(--muted); padding-left: 16px; position: relative; }
+  .about-card li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
+
+  .admin-profile {
+    background: linear-gradient(135deg, var(--card), var(--bg3));
+    border: 1px solid rgba(200,245,106,0.3);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    text-align: center;
+    position: sticky; top: 90px;
+  }
+
+  .admin-avatar {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--bg);
+    margin: 0 auto 1.2rem;
+    border: 3px solid rgba(200,245,106,0.5);
+  }
+
+  .admin-name {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .admin-title {
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: var(--font-mono);
+    margin-bottom: 1.2rem;
+  }
+
+  .admin-bio { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+  .social-links {
+    display: flex; justify-content: center; gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .slink {
+    display: flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s;
+  }
+
+  .slink:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── BLOG ─── */
+  .blog-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .blog-search {
+    flex: 1; min-width: 200px; max-width: 340px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    padding: 10px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.2s;
+  }
+
+  .blog-search:focus { border-color: var(--accent); }
+  .blog-search::placeholder { color: var(--muted); }
+
+  .blog-cats { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .cat-btn {
+    padding: 6px 16px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: 0.2s;
+  }
+
+  .cat-btn.active, .cat-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,245,106,0.05);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .blog-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .blog-card:hover { border-color: rgba(200,245,106,0.4); transform: translateY(-4px); box-shadow: var(--shadow); }
+
+  .blog-thumb {
+    height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blog-body { padding: 1.5rem; }
+
+  .blog-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .blog-cat {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .blog-date { font-size: 0.75rem; color: var(--muted); font-family: var(--font-mono); }
+
+  .blog-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+
+  .blog-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  .blog-read {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+    font-family: var(--font-mono);
+  }
+
+  /* ─── BLOG POST VIEW ─── */
+  #blog-post { display: none; }
+  #blog-post.active { display: block; }
+
+  .post-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: none; border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 10px 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    transition: 0.2s;
+    margin-bottom: 2rem;
+  }
+
+  .post-back:hover { border-color: var(--accent); color: var(--accent); }
+
+  .post-header { margin-bottom: 3rem; }
+  .post-title {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin: 1rem 0;
+  }
+
+  .post-body {
+    max-width: 720px;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .post-body h2, .post-body h3 {
+    font-family: var(--font-head);
+    color: var(--white);
+    margin: 2rem 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .post-body p { margin-bottom: 1.2rem; }
+  .post-body ul { padding-left: 1.5rem; margin-bottom: 1.2rem; }
+  .post-body li { margin-bottom: 6px; }
+  .post-body strong { color: var(--accent); }
+  .post-body blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem;
+    background: var(--card);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--text);
+  }
+
+  /* ─── ORDERS (COMMANDES) ─── */
+  .orders-tabs {
+    display: flex; gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    width: fit-content;
+    margin-bottom: 2rem;
+  }
+
+  .otab {
+    padding: 10px 24px;
+    background: var(--card);
+    border: none; cursor: pointer;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.2s;
+  }
+
+  .otab.active { background: var(--accent); color: var(--bg); }
+
+  .orders-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .order-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    transition: 0.2s;
+  }
+
+  .order-card:hover { border-color: rgba(200,245,106,0.3); }
+
+  .order-id {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: rgba(200,245,106,0.1);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .order-info h4 {
+    font-family: var(--font-head);
+    color: var(--white);
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .order-info p { font-size: 0.82rem; color: var(--muted); }
+
+  .order-status {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  }
+
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .status-pending { background: rgba(232,201,106,0.15); color: var(--gold); border: 1px solid rgba(232,201,106,0.3); }
+  .status-progress { background: rgba(200,245,106,0.1); color: var(--accent); border: 1px solid rgba(200,245,106,0.3); }
+  .status-done { background: rgba(126,203,122,0.1); color: var(--accent2); border: 1px solid rgba(126,203,122,0.3); }
+  .status-cancelled { background: rgba(245,106,106,0.1); color: var(--danger); border: 1px solid rgba(245,106,106,0.3); }
+
+  .order-amount {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--bg2); }
+
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1.5fr;
+    gap: 4rem; margin-top: 3rem;
+    align-items: start;
+  }
+
+  .contact-info-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .cinfo-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .cinfo-val { font-size: 0.95rem; color: var(--text); }
+  .cinfo-val a { color: var(--text); text-decoration: none; }
+  .cinfo-val a:hover { color: var(--accent); }
+
+  .contact-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+  }
+
+  .form-group { margin-bottom: 1.3rem; }
+
+  .form-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+  .form-textarea { resize: vertical; min-height: 140px; }
+  .form-select option { background: var(--bg); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* ─── ADMIN PANEL ─── */
+  .admin-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+  }
+
+  .admin-overlay.open { display: flex; }
+
+  .admin-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2.5rem;
+    width: 100%; max-width: 460px;
+    position: relative;
+  }
+
+  .admin-modal h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-close {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    background: none; border: none;
+    color: var(--muted); font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--danger); }
+
+  /* ─── ADMIN DASHBOARD ─── */
+  #admin-panel { display: none; }
+  #admin-panel.active { display: block; }
+
+  .admin-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .admin-greeting {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    color: var(--white);
+  }
+
+  .logout-btn {
+    padding: 8px 20px;
+    background: rgba(245,106,106,0.1);
+    border: 1px solid rgba(245,106,106,0.3);
+    color: var(--danger);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    transition: 0.2s;
+  }
+
+  .logout-btn:hover { background: rgba(245,106,106,0.2); }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .dash-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: 0.2s;
+  }
+
+  .dash-card:hover { border-color: rgba(200,245,106,0.3); }
+
+  .dash-num {
+    font-family: var(--font-head);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .dash-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .admin-section-title {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .new-btn {
+    padding: 7px 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none; border-radius: 2px;
+    font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; font-family: var(--font-body);
+    transition: 0.2s;
+  }
+
+  .new-btn:hover { background: var(--white); }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.87rem;
+  }
+
+  .admin-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg3);
+    color: var(--muted);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .admin-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .admin-table tr:hover td { background: rgba(200,245,106,0.02); }
+
+  .action-btn {
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: 0.2s;
+    margin-right: 4px;
+  }
+
+  .action-edit { background: rgba(200,245,106,0.1); border: 1px solid rgba(200,245,106,0.3); color: var(--accent); }
+  .action-edit:hover { background: rgba(200,245,106,0.2); }
+  .action-delete { background: rgba(245,106,106,0.1); border: 1px solid rgba(245,106,106,0.3); color: var(--danger); }
+  .action-delete:hover { background: rgba(245,106,106,0.2); }
+
+  /* ─── CONTENT EDITOR MODAL ─── */
+  .editor-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 3000;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    align-items: flex-start; justify-content: center;
+    padding: 40px 20px;
+    overflow-y: auto;
+  }
+  .editor-overlay.open { display: flex; }
+
+  .editor-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%; max-width: 700px;
+  }
+
+  .editor-modal h3 {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 9999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { background: var(--danger); color: var(--white); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 4rem 5% 2rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand { }
+
+  .footer-logo {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .footer-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .footer-col h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-col li { }
+  .footer-col a, .footer-col button {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    background: none; border: none;
+    cursor: pointer; padding: 0;
+    font-family: var(--font-body);
+    transition: color 0.2s;
+    text-align: left;
+  }
+
+  .footer-col a:hover, .footer-col button:hover { color: var(--accent); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ─── CTA SECTION ─── */
+  .cta-section {
+    padding: 6rem 5%;
+    text-align: center;
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(200,245,106,0.06) 0%, transparent 70%);
+  }
+
+  .cta-section > * { position: relative; z-index: 1; }
+  .cta-section h2 { margin-bottom: 1rem; }
+  .cta-section p { color: var(--muted); max-width: 500px; margin: 0 auto 2rem; }
+
+  /* ─── ALERT ─── */
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+  }
+  .alert-error { background: rgba(245,106,106,0.1); border: 1px solid rgba(245,106,106,0.3); color: var(--danger); }
+  .alert-success { background: rgba(200,245,106,0.1); border: 1px solid rgba(200,245,106,0.3); color: var(--accent); }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+  }
+  .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state p { font-size: 0.9rem; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .why-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .admin-modal { padding: 2rem; }
+    .order-card { grid-template-columns: 1fr; gap: 0.8rem; }
+    .order-status { align-items: flex-start; }
+    .admin-table { display: block; overflow-x: auto; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 4%; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; right: 0; background: var(--bg2); padding: 1.5rem 5%; border-bottom: 1px solid var(--border); gap: 1.2rem; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    section { padding: 4rem 5%; }
+    .footer-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 2.4rem; }
+    .hero-btns { flex-direction: column; }
+    .blog-grid { grid-template-columns: 1fr; }
+    .orders-tabs { width: 100%; }
+    .otab { flex: 1; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up { animation: fadeUp 0.6s ease forwards; }
+  .fade-up-2 { animation: fadeUp 0.6s 0.15s ease both; }
+  .fade-up-3 { animation: fadeUp 0.6s 0.3s ease both; }
+  .fade-up-4 { animation: fadeUp 0.6s 0.45s ease both; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="showPage('home')">Nova<span>Learn</span></div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#" onclick="showPage('home');return false;" id="nav-home">Accueil</a></li>
+    <li><a href="#" onclick="scrollToSection('why');return false;">À propos</a></li>
+    <li><a href="#" onclick="scrollToSection('services');return false;">Services</a></li>
+    <li><a href="#" onclick="showPage('blog');return false;" id="nav-blog">Blog</a></li>
+    <li><a href="#" onclick="showPage('orders');return false;" id="nav-orders">Commandes</a></li>
+    <li><a href="#" onclick="scrollToSection('contact');return false;">Contact</a></li>
+    <li><button class="nav-admin-btn" onclick="openAdminLogin()">Admin</button></li>
+  </ul>
+</nav>
+
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-tag fade-up">Ingénierie de la Formation · Andragogie</div>
+      <h1 class="fade-up-2">Former les adultes <em>autrement.</em><br>Transformer les compétences <em>durablement.</em></h1>
+      <p class="hero-subtitle fade-up-3">Bienvenue chez <strong style="color:var(--white)">NovaLearn Afrique</strong>, cabinet spécialisé en ingénierie de la formation et en andragogie au service des entreprises, institutions, ONG et porteurs de projets.</p>
+      <div class="hero-btns fade-up-4">
+        <button class="btn-primary" onclick="scrollToSection('contact')">Demander un accompagnement</button>
+        <button class="btn-outline" onclick="scrollToSection('services')">Découvrir nos services</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-band">
+    <div class="stat-item"><div class="stat-num">+100</div><div class="stat-label">Professionnels accompagnés</div></div>
+    <div class="stat-item"><div class="stat-num">+25</div><div class="stat-label">Projets de formation réalisés</div></div>
+    <div class="stat-item"><div class="stat-num">+15</div><div class="stat-label">Partenaires institutionnels</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Présentiel & à distance</div></div>
+  </div>
+
+  <!-- WHY US -->
+  <section id="why">
+    <div class="section-tag">// Pourquoi nous choisir</div>
+    <h2>Une formation efficace, c'est bien plus<br>que transmettre des <em>connaissances.</em></h2>
+    <p class="section-intro">Chez NovaLearn Afrique, nous créons des expériences d'apprentissage capables de transformer durablement les compétences et les pratiques professionnelles.</p>
+    <div class="why-grid">
+      <ul class="why-list">
+        <li class="why-item"><div class="why-icon">🔍</div><div class="why-text"><strong>Ingénierie de la formation</strong><span>Conception de dispositifs structurés et rigoureux</span></div></li>
+        <li class="why-item"><div class="why-icon">📊</div><div class="why-text"><strong>Analyse des besoins en formation</strong><span>Diagnostic précis des écarts de compétences</span></div></li>
+        <li class="why-item"><div class="why-icon">🎯</div><div class="why-text"><strong>Conception pédagogique</strong><span>Programmes adaptés aux réalités du terrain</span></div></li>
+        <li class="why-item"><div class="why-icon">👨‍🏫</div><div class="why-text"><strong>Accompagnement des formateurs</strong><span>Maîtrise des méthodes andragogiques</span></div></li>
+        <li class="why-item"><div class="why-icon">📈</div><div class="why-text"><strong>Évaluation des dispositifs</strong><span>Mesure d'impact sur les pratiques professionnelles</span></div></li>
+        <li class="why-item"><div class="why-icon">🌱</div><div class="why-text"><strong>Développement des compétences</strong><span>Acquisition de savoirs directement mobilisables</span></div></li>
+      </ul>
+      <div class="why-principles">
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1rem;">Notre méthodologie repose sur les <strong style="color:var(--white)">principes fondamentaux de l'andragogie</strong> :</p>
+        <div class="principle"><div class="principle-dot"></div><span>Participation active de l'apprenant</span></div>
+        <div class="principle"><div class="principle-dot"></div><span>Contextualisation des apprentissages</span></div>
+        <div class="principle"><div class="principle-dot"></div><span>Valorisation des expériences antérieures</span></div>
+        <div class="principle"><div class="principle-dot"></div><span>Autonomie de l'apprenant adulte</span></div>
+        <div class="principle"><div class="principle-dot"></div><span>Acquisition de compétences directement mobilisables</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-tag">// Nos services</div>
+    <h2>Des solutions pédagogiques<br>sur <em>mesure.</em></h2>
+    <p class="section-intro">Chaque organisation a des besoins spécifiques. Nous concevons des réponses adaptées, rigoureuses et orientées résultats.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-num">01 —</div>
+        <h3>Analyse des besoins en formation</h3>
+        <p>Nous réalisons des diagnostics afin d'identifier les écarts de compétences et les besoins réels des organisations et des professionnels.</p>
+        <div class="service-tags"><span class="stag">Diagnostic</span><span class="stag">Audit</span><span class="stag">Analyse</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">02 —</div>
+        <h3>Conception de programmes</h3>
+        <p>Nous élaborons des modules et curricula adaptés aux objectifs pédagogiques, au public cible et aux réalités professionnelles.</p>
+        <div class="service-tags"><span class="stag">Curricula</span><span class="stag">Modules</span><span class="stag">Scénarios</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">03 —</div>
+        <h3>Élaboration de supports pédagogiques</h3>
+        <p>Guides de formation, manuels pédagogiques, fiches techniques, contenus numériques et outils d'évaluation.</p>
+        <div class="service-tags"><span class="stag">Guides</span><span class="stag">Manuels</span><span class="stag">E-learning</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">04 —</div>
+        <h3>Formation de formateurs</h3>
+        <p>Maîtrise des méthodes andragogiques, gestion de groupe, techniques d'animation et évaluation des apprentissages.</p>
+        <div class="service-tags"><span class="stag">Andragogie</span><span class="stag">Animation</span><span class="stag">Évaluation</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">05 —</div>
+        <h3>Évaluation des dispositifs</h3>
+        <p>Analyse de l'efficacité des formations à travers les indicateurs de performance et les impacts sur les pratiques professionnelles.</p>
+        <div class="service-tags"><span class="stag">KPI</span><span class="stag">Impact</span><span class="stag">Suivi</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">06 —</div>
+        <h3>Accompagnement des organisations</h3>
+        <p>Plans de formation, stratégies de développement des compétences et dispositifs de suivi-évaluation.</p>
+        <div class="service-tags"><span class="stag">Stratégie</span><span class="stag">Plans</span><span class="stag">Conseil</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section id="values">
+    <div class="section-tag">// Nos valeurs</div>
+    <h2>Ce qui guide<br>notre <em>démarche.</em></h2>
+    <div class="values-grid">
+      <div class="value-card"><div class="value-icon">⚙️</div><h3>Professionnalisme</h3><p>Des solutions structurées, adaptées et rigoureuses à chaque étape.</p></div>
+      <div class="value-card"><div class="value-icon">💡</div><h3>Innovation pédagogique</h3><p>Des approches modernes centrées sur l'apprenant adulte.</p></div>
+      <div class="value-card"><div class="value-icon">🎯</div><h3>Impact</h3><p>Nos formations visent des résultats concrets et mesurables.</p></div>
+      <div class="value-card"><div class="value-icon">👂</div><h3>Écoute</h3><p>Chaque organisation possède des besoins spécifiques que nous analysons avec attention.</p></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-tag">// Notre cabinet</div>
+    <h2>Une référence en ingénierie<br>de la formation en <em>Afrique.</em></h2>
+    <div class="about-grid">
+      <div>
+        <div class="about-card">
+          <h3>Notre vision</h3>
+          <p style="font-size:0.9rem;color:var(--muted);line-height:1.7;">Devenir une référence en ingénierie de la formation en Afrique, en proposant des solutions pédagogiques innovantes, inclusives et adaptées aux enjeux du développement professionnel et social.</p>
+        </div>
+        <div class="about-card">
+          <h3>Notre mission</h3>
+          <ul>
+            <li>Identifier les besoins réels en compétences</li>
+            <li>Concevoir des programmes de formation adaptés</li>
+            <li>Accompagner les formateurs et structures éducatives</li>
+            <li>Renforcer l'efficacité des dispositifs d'apprentissage</li>
+            <li>Promouvoir une culture de formation continue</li>
+          </ul>
+        </div>
+        <div class="about-card">
+          <h3>Nous accompagnons</h3>
+          <ul>
+            <li>Les entreprises</li>
+            <li>Les ONG</li>
+            <li>Les institutions publiques</li>
+            <li>Les établissements d'enseignement</li>
+            <li>Les centres de formation</li>
+            <li>Les entrepreneurs et porteurs de projets</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="admin-profile">
+          <div class="admin-avatar">JF</div>
+          <div class="admin-name">Junior Sèwanou FAVIDE</div>
+          <div class="admin-title">Andragogue · Formateur</div>
+          <p class="admin-bio">Administrateur principal du cabinet NovaLearn Afrique. Spécialiste en ingénierie de la formation et en andragogie, engagé pour le développement des compétences professionnelles en Afrique francophone.</p>
+          <div class="social-links">
+            <a href="https://www.linkedin.com/in/junior-favide-622071324" target="_blank" class="slink" title="LinkedIn">in</a>
+            <a href="https://wa.me/22901644168​31" target="_blank" class="slink" title="WhatsApp">W</a>
+            <a href="mailto:sewanoufavide@gmail.com" class="slink" title="Email">@</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="section-tag">// Passez à l'action</div>
+    <h2>Vous souhaitez développer<br>les compétences de vos <em>équipes ?</em></h2>
+    <p>Nous vous accompagnons dans la conception, l'organisation et l'amélioration de vos dispositifs de formation professionnelle.</p>
+    <button class="btn-primary" onclick="scrollToSection('contact')">Contactez-nous dès aujourd'hui</button>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-tag">// Contactez-nous</div>
+    <h2>Un projet ? Une question ?<br>Parlons-en <em>maintenant.</em></h2>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info-block"><div class="cinfo-label">Téléphone</div><div class="cinfo-val"><a href="tel:+22901644168​31">+229 0164416831</a></div></div>
+        <div class="contact-info-block"><div class="cinfo-label">E-mail</div><div class="cinfo-val"><a href="mailto:sewanoufavide@gmail.com">sewanoufavide@gmail.com</a></div></div>
+        <div class="contact-info-block"><div class="cinfo-label">Adresse</div><div class="cinfo-val">Cotonou, Littoral – Bénin</div></div>
+        <div class="contact-info-block"><div class="cinfo-label">Horaires</div><div class="cinfo-val">Lun – Ven : 08h00 à 18h00<br>Sam : 09h00 à 13h00</div></div>
+        <div class="contact-info-block"><div class="cinfo-label">Rendez-vous</div><div class="cinfo-val" style="font-size:0.85rem;color:var(--muted);">Consultations · Séances de travail · Accompagnements personnalisés · Rencontres professionnelles</div></div>
+      </div>
+      <div class="contact-form">
+        <h3 style="font-family:var(--font-head);font-size:1.3rem;color:var(--white);margin-bottom:1.5rem;">Envoyez-nous un message</h3>
+        <div id="contact-alert"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nom complet</label>
+            <input type="text" class="form-input" id="c-name" placeholder="Votre nom">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" class="form-input" id="c-phone" placeholder="+229...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail</label>
+          <input type="email" class="form-input" id="c-email" placeholder="vous@exemple.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Objet</label>
+          <select class="form-select" id="c-subject">
+            <option value="">— Choisir un objet —</option>
+            <option>Demande d'accompagnement</option>
+            <option>Demande de devis</option>
+            <option>Formation de formateurs</option>
+            <option>Analyse des besoins</option>
+            <option>Partenariat</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" id="c-message" placeholder="Décrivez votre projet ou votre besoin..."></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="sendContactForm()">Envoyer le message</button>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end page-home -->
+
+
+<!-- ═══ BLOG PAGE ═══ -->
+<div class="page" id="page-blog" style="padding-top:70px;">
+  <section>
+    <div class="section-tag">// Ressources & Réflexions</div>
+    <h2>Le Blog<br><em>NovaLearn Afrique</em></h2>
+    <p class="section-intro">Articles, réflexions et ressources sur l'andragogie, l'ingénierie de la formation et le développement des compétences en Afrique.</p>
+
+    <div class="blog-controls" style="margin-top:2.5rem;">
+      <input type="text" class="blog-search" id="blog-search-input" placeholder="Rechercher un article..." oninput="filterBlog()">
+      <div class="blog-cats" id="blog-cats">
+        <button class="cat-btn active" onclick="filterBlogCat('all', this)">Tous</button>
+        <button class="cat-btn" onclick="filterBlogCat('andragogie', this)">Andragogie</button>
+        <button class="cat-btn" onclick="filterBlogCat('ingenierie', this)">Ingénierie</button>
+        <button class="cat-btn" onclick="filterBlogCat('outils', this)">Outils</button>
+        <button class="cat-btn" onclick="filterBlogCat('afrique', this)">Afrique</button>
+      </div>
+    </div>
+
+    <div class="blog-grid" id="blog-grid"></div>
+  </section>
+</div>
+
+<!-- BLOG POST VIEW -->
+<div id="blog-post" style="padding-top:70px;">
+  <section>
+    <button class="post-back" onclick="closeBlogPost()">← Retour au blog</button>
+    <div class="post-header">
+      <div id="post-meta" class="blog-meta"></div>
+      <h1 class="post-title" id="post-title"></h1>
+    </div>
+    <div class="post-body" id="post-body"></div>
+  </section>
+</div>
+
+
+<!-- ═══ ORDERS PAGE ═══ -->
+<div class="page" id="page-orders" style="padding-top:70px;">
+  <section>
+    <div class="section-tag">// Espace Client</div>
+    <h2>Mes <em>Commandes</em></h2>
+    <p class="section-intro">Consultez l'état de vos demandes et suivez l'avancement de vos projets de formation en cours.</p>
+
+    <div style="margin-top:2.5rem;">
+      <div class="form-group" style="max-width:400px;margin-bottom:2rem;">
+        <label class="form-label">Rechercher par e-mail ou numéro de commande</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" class="form-input" id="order-search" placeholder="ex: sewanoufavide@gmail.com">
+          <button class="btn-primary" style="white-space:nowrap" onclick="searchOrders()">Rechercher</button>
+        </div>
+      </div>
+
+      <div class="orders-tabs">
+        <button class="otab active" onclick="filterOrders('all', this)">Toutes</button>
+        <button class="otab" onclick="filterOrders('pending', this)">En attente</button>
+        <button class="otab" onclick="filterOrders('progress', this)">En cours</button>
+        <button class="otab" onclick="filterOrders('done', this)">Terminées</button>
+      </div>
+
+      <div class="orders-list" id="orders-list"></div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══ ADMIN PANEL ═══ -->
+<div class="page" id="page-admin" style="padding-top:70px;">
+  <section>
+    <div id="admin-panel">
+      <div class="admin-header">
+        <div>
+          <div class="section-tag">// Tableau de bord administrateur</div>
+          <div class="admin-greeting">Bonjour, <em style="color:var(--accent)">Junior</em> 👋</div>
+        </div>
+        <button class="logout-btn" onclick="adminLogout()">Déconnexion</button>
+      </div>
+
+      <!-- DASH STATS -->
+      <div class="dash-grid" id="dash-grid"></div>
+
+      <!-- ORDERS MANAGEMENT -->
+      <div style="margin-bottom:3rem;">
+        <div class="admin-section-title">
+          Gestion des commandes
+          <button class="new-btn" onclick="openOrderEditor()">+ Nouvelle commande</button>
+        </div>
+        <div style="overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);">
+          <table class="admin-table" id="admin-orders-table">
+            <thead><tr><th>N°</th><th>Client</th><th>Service</th><th>Date</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="admin-orders-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BLOG MANAGEMENT -->
+      <div>
+        <div class="admin-section-title">
+          Gestion du blog
+          <button class="new-btn" onclick="openPostEditor()">+ Nouvel article</button>
+        </div>
+        <div style="overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);">
+          <table class="admin-table" id="admin-blog-table">
+            <thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="admin-blog-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">NovaLearn <span style="color:var(--gold)">Afrique</span></div>
+      <p class="footer-desc">Cabinet spécialisé en ingénierie de la formation et en andragogie. Transformer les compétences, durablement.</p>
+      <div class="social-links" style="justify-content:flex-start">
+        <a href="https://www.linkedin.com/in/junior-favide-622071324" target="_blank" class="slink">in</a>
+        <a href="https://wa.me/2290164416831" target="_blank" class="slink">W</a>
+        <a href="mailto:sewanoufavide@gmail.com" class="slink">@</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><button onclick="showPage('home')">Accueil</button></li>
+        <li><button onclick="scrollToSection('why')">À propos</button></li>
+        <li><button onclick="scrollToSection('services')">Services</button></li>
+        <li><button onclick="showPage('blog')">Blog</button></li>
+        <li><button onclick="showPage('orders')">Commandes</button></li>
+        <li><button onclick="scrollToSection('contact')">Contact</button></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Analyse des besoins</a></li>
+        <li><a href="#">Conception de programmes</a></li>
+        <li><a href="#">Formation de formateurs</a></li>
+        <li><a href="#">Supports pédagogiques</a></li>
+        <li><a href="#">Évaluation</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+2290164416831">+229 0164416831</a></li>
+        <li><a href="mailto:sewanoufavide@gmail.com">sewanoufavide@gmail.com</a></li>
+        <li><a href="#">Cotonou, Bénin</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 NovaLearn Afrique — Tous droits réservés.</span>
+    <span style="font-family:var(--font-mono);font-size:0.72rem;">Administré par Junior Sèwanou FAVIDE</span>
+  </div>
+</footer>
+
+
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-modal">
+    <button class="modal-close" onclick="closeAdminLogin()">✕</button>
+    <div class="section-tag">// Accès administrateur</div>
+    <h2>Connexion</h2>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem;">Réservé à l'équipe NovaLearn Afrique.</p>
+    <div id="login-alert"></div>
+    <div class="form-group">
+      <label class="form-label">Identifiant</label>
+      <input type="text" class="form-input" id="admin-user" placeholder="Identifiant" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mot de passe</label>
+      <input type="password" class="form-input" id="admin-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:0.5rem" onclick="doAdminLogin()">Se connecter</button>
+  </div>
+</div>
+
+
+<!-- ═══ ORDER EDITOR MODAL ═══ -->
+<div class="editor-overlay" id="order-editor-overlay">
+  <div class="editor-modal">
+    <h3 id="order-editor-title">Nouvelle commande</h3>
+    <input type="hidden" id="order-edit-id">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nom du client</label>
+        <input type="text" class="form-input" id="oe-name" placeholder="Nom complet">
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input type="email" class="form-input" id="oe-email" placeholder="client@email.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Service demandé</label>
+        <select class="form-select" id="oe-service">
+          <option>Analyse des besoins</option>
+          <option>Conception de programme</option>
+          <option>Formation de formateurs</option>
+          <option>Supports pédagogiques</option>
+          <option>Évaluation de dispositif</option>
+          <option>Accompagnement organisationnel</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Montant (FCFA)</label>
+        <input type="text" class="form-input" id="oe-amount" placeholder="ex: 150 000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Statut</label>
+        <select class="form-select" id="oe-status">
+          <option value="pending">En attente</option>
+          <option value="progress">En cours</option>
+          <option value="done">Terminé</option>
+          <option value="cancelled">Annulé</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="oe-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea class="form-textarea" id="oe-notes" style="min-height:80px" placeholder="Informations complémentaires..."></textarea>
+    </div>
+    <div style="display:flex;gap:1rem;margin-top:1rem;">
+      <button class="btn-primary" onclick="saveOrder()">Enregistrer</button>
+      <button class="btn-outline" onclick="closeOrderEditor()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ POST EDITOR MODAL ═══ -->
+<div class="editor-overlay" id="post-editor-overlay">
+  <div class="editor-modal">
+    <h3 id="post-editor-title">Nouvel article</h3>
+    <input type="hidden" id="post-edit-id">
+    <div class="form-group">
+      <label class="form-label">Titre de l'article</label>
+      <input type="text" class="form-input" id="pe-title" placeholder="Titre accrocheur...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Catégorie</label>
+        <select class="form-select" id="pe-cat">
+          <option value="andragogie">Andragogie</option>
+          <option value="ingenierie">Ingénierie</option>
+          <option value="outils">Outils</option>
+          <option value="afrique">Afrique</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Emoji / Icône</label>
+        <input type="text" class="form-input" id="pe-icon" placeholder="📚" maxlength="4">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Résumé (accroche)</label>
+      <textarea class="form-textarea" id="pe-excerpt" style="min-height:80px" placeholder="Courte introduction visible sur la liste du blog..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contenu complet (HTML ou texte)</label>
+      <textarea class="form-textarea" id="pe-content" style="min-height:220px;font-family:var(--font-mono);font-size:0.82rem;" placeholder="&lt;p&gt;Votre article...&lt;/p&gt;&#10;&lt;h2&gt;Section&lt;/h2&gt;&#10;&lt;p&gt;Contenu...&lt;/p&gt;"></textarea>
+    </div>
+    <div style="display:flex;gap:1rem;margin-top:1rem;">
+      <button class="btn-primary" onclick="savePost()">Publier</button>
+      <button class="btn-outline" onclick="closePostEditor()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+
+// ── STORAGE HELPERS ──
+const KEYS = { orders: 'nla_orders', posts: 'nla_posts', auth: 'nla_admin' };
+
+function load(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch { return []; }
+}
+
+function save(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function uid() {
+  return 'NL-' + Date.now().toString(36).toUpperCase();
+}
+
+// ── ADMIN CREDENTIALS ── (modifiables ici)
+const ADMIN_CREDS = { user: 'junior', pass: 'novalearn2026' };
+
+// ── TOAST ──
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── PAGE NAVIGATION ──
+let currentPage = 'home';
+
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  document.getElementById('blog-post').style.display = 'none';
+  document.getElementById('blog-post').classList.remove('active');
+  currentPage = p;
+  window.scrollTo(0, 0);
+  closeMenu();
+
+  if (p === 'blog') renderBlog();
+  if (p === 'orders') renderOrders();
+  if (p === 'admin') {
+    if (!sessionStorage.getItem(KEYS.auth)) { openAdminLogin(); return; }
+    renderAdminDash();
+  }
+}
+
+function scrollToSection(id) {
+  showPage('home');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+  closeMenu();
+}
+
+// ── MOBILE MENU ──
+function toggleMenu() {
+  document.getElementById('nav-links').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('nav-links').classList.remove('open');
+}
+
+// ── ADMIN LOGIN ──
+function openAdminLogin() {
+  document.getElementById('admin-overlay').classList.add('open');
+  document.getElementById('login-alert').innerHTML = '';
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
+  setTimeout(() => document.getElementById('admin-user').focus(), 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById('admin-overlay').classList.remove('open');
+}
+
+function doAdminLogin() {
+  const u = document.getElementById('admin-user').value.trim();
+  const p = document.getElementById('admin-pass').value;
+  const alert = document.getElementById('login-alert');
+
+  if (u === ADMIN_CREDS.user && p === ADMIN_CREDS.pass) {
+    sessionStorage.setItem(KEYS.auth, '1');
+    closeAdminLogin();
+    showPage('admin');
+    toast('Bienvenue, Junior ! ✓');
+  } else {
+    alert.innerHTML = '<div class="alert alert-error">Identifiant ou mot de passe incorrect.</div>';
+  }
+}
+
+function adminLogout() {
+  sessionStorage.removeItem(KEYS.auth);
+  showPage('home');
+  toast('Déconnecté.');
+}
+
+// ── BLOG ──
+const CAT_COLORS = {
+  andragogie: { bg: 'rgba(200,245,106,0.12)', color: '#c8f56a' },
+  ingenierie: { bg: 'rgba(232,201,106,0.12)', color: '#e8c96a' },
+  outils: { bg: 'rgba(126,203,122,0.12)', color: '#7ecb7a' },
+  afrique: { bg: 'rgba(106,189,245,0.12)', color: '#6abdf5' },
+};
+
+const CAT_LABELS = {
+  andragogie: 'Andragogie',
+  ingenierie: 'Ingénierie',
+  outils: 'Outils',
+  afrique: 'Afrique',
+};
+
+const DEFAULT_POSTS = [
+  {
+    id: 'p1',
+    title: "L'andragogie : une science au service de la formation des adultes",
+    cat: 'andragogie',
+    icon: '📚',
+    date: '2026-05-15',
+    excerpt: "Comprendre les fondements de l'andragogie, telle que définie par Malcolm Knowles, pour concevoir des formations véritablement adaptées aux apprenants adultes.",
+    content: `<p>L'andragogie, terme popularisé par <strong>Malcolm Knowles</strong> dans les années 1970, désigne l'art et la science d'aider les adultes à apprendre. Contrairement à la pédagogie traditionnelle centrée sur l'enfant, l'andragogie reconnaît les caractéristiques spécifiques de l'apprenant adulte.</p>
+<h2>Les six postulats de Knowles</h2>
+<p>Knowles a identifié six postulats fondamentaux qui distinguent l'apprentissage adulte :</p>
+<ul>
+<li><strong>Le besoin de savoir</strong> : l'adulte veut comprendre pourquoi il doit apprendre quelque chose avant de s'y investir.</li>
+<li><strong>Le concept de soi</strong> : l'adulte se perçoit comme responsable de ses propres décisions d'apprentissage.</li>
+<li><strong>L'expérience antérieure</strong> : le vécu de l'adulte constitue une ressource riche pour l'apprentissage.</li>
+<li><strong>La disposition à apprendre</strong> : les adultes apprennent ce qui les aide à faire face aux situations réelles de leur vie.</li>
+<li><strong>L'orientation de l'apprentissage</strong> : centré sur la résolution de problèmes concrets.</li>
+<li><strong>La motivation</strong> : les adultes sont davantage motivés par des facteurs internes (satisfaction, estime de soi).</li>
+</ul>
+<h2>Application au contexte africain</h2>
+<p>En Afrique francophone, et particulièrement au Bénin, l'andragogie prend une dimension supplémentaire. Les apprenants adultes intègrent souvent leurs formations dans des parcours de vie complexes, jonglant entre responsabilités familiales, contraintes économiques et aspirations professionnelles.</p>
+<blockquote>La formation des adultes en Afrique ne peut ignorer les réalités socioculturelles et économiques du contexte. Elle doit s'y ancrer pour être véritablement transformatrice.</blockquote>
+<p>Chez NovaLearn Afrique, nous intégrons ces principes dans chacune de nos conceptions pédagogiques, garantissant des formations pertinentes, contextualisées et efficaces.</p>`
+  },
+  {
+    id: 'p2',
+    title: "Ingénierie de la formation : de l'analyse des besoins à l'évaluation",
+    cat: 'ingenierie',
+    icon: '⚙️',
+    date: '2026-04-28',
+    excerpt: "Un guide complet sur le cycle de l'ingénierie de la formation, des étapes clés à la mise en œuvre d'un dispositif de formation efficace.",
+    content: `<p>L'ingénierie de la formation est une démarche rigoureuse qui permet de concevoir, mettre en œuvre et évaluer des dispositifs de formation professionnelle. Elle s'organise en plusieurs étapes clés.</p>
+<h2>1. L'analyse des besoins</h2>
+<p>La première étape consiste à réaliser un diagnostic précis des <strong>écarts de compétences</strong>. Cela implique d'identifier la situation actuelle et la situation souhaitée, puis de définir les actions de formation susceptibles de combler cet écart.</p>
+<h2>2. La conception pédagogique</h2>
+<p>Une fois les besoins identifiés, le formateur-ingénieur conçoit le programme en définissant les objectifs pédagogiques (de type SMART), en sélectionnant les méthodes et techniques d'animation, et en créant les supports appropriés.</p>
+<h2>3. La mise en œuvre</h2>
+<p>La phase d'implémentation exige une attention particulière à la logistique, à l'animation et au suivi en temps réel des apprentissages.</p>
+<h2>4. L'évaluation</h2>
+<p>Selon le modèle de Kirkpatrick, l'évaluation se déroule sur quatre niveaux : réaction, apprentissage, transfert et impact. C'est cette dernière étape qui permet de mesurer le retour sur investissement de la formation.</p>`
+  },
+  {
+    id: 'p3',
+    title: "5 outils numériques pour enrichir vos formations professionnelles",
+    cat: 'outils',
+    icon: '🛠️',
+    date: '2026-04-10',
+    excerpt: "La transformation digitale des formations est incontournable. Voici une sélection d'outils pratiques pour créer des formations interactives, engageantes et accessibles.",
+    content: `<p>La transformation digitale a profondément modifié le paysage de la formation professionnelle. Voici cinq outils incontournables pour les formateurs modernes.</p>
+<h2>1. Canva (supports visuels)</h2>
+<p>Canva permet de créer des <strong>supports pédagogiques visuellement attractifs</strong> sans compétences en design graphique. Idéal pour les fiches, présentations et infographies.</p>
+<h2>2. Mentimeter (interactions en direct)</h2>
+<p>Cet outil permet d'intégrer des sondages, quiz et nuages de mots en temps réel pendant les sessions de formation. Il favorise la participation active des apprenants.</p>
+<h2>3. Moodle (LMS open source)</h2>
+<p>Moodle est la plateforme de gestion d'apprentissage la plus utilisée dans le monde. <strong>Gratuite et open source</strong>, elle permet de créer des parcours d'apprentissage complets et de suivre la progression des apprenants.</p>
+<h2>4. Kahoot! (gamification)</h2>
+<p>La gamification augmente l'engagement et la rétention. Kahoot! permet de créer des quiz ludiques pour évaluer les apprentissages de manière dynamique.</p>
+<h2>5. Loom (vidéos tutorielles)</h2>
+<p>Loom facilite la création de capsules vidéo asynchrones. Le formateur peut enregistrer son écran et sa voix pour produire des ressources pédagogiques consultables à tout moment.</p>`
+  },
+  {
+    id: 'p4',
+    title: "Formation professionnelle en Afrique de l'Ouest : défis et perspectives",
+    cat: 'afrique',
+    icon: '🌍',
+    date: '2026-03-22',
+    excerpt: "État des lieux de la formation professionnelle en Afrique de l'Ouest, des obstacles persistants aux solutions innovantes portées par les acteurs locaux.",
+    content: `<p>L'Afrique de l'Ouest connaît une transition démographique sans précédent. Avec plus de 60% de sa population ayant moins de 25 ans, la région fait face à un défi majeur : former une main-d'œuvre compétente, adaptable et prête pour les marchés du travail du 21e siècle.</p>
+<h2>Les obstacles persistants</h2>
+<p>Plusieurs obstacles freinent encore le développement de la formation professionnelle dans la région :</p>
+<ul>
+<li>Le manque de ressources financières allouées à la formation</li>
+<li>L'insuffisance de formateurs qualifiés en andragogie</li>
+<li>Le faible alignement entre les formations proposées et les besoins du marché</li>
+<li>Les difficultés d'accès pour les populations rurales</li>
+</ul>
+<h2>Des perspectives encourageantes</h2>
+<p>Malgré ces défis, des <strong>initiatives prometteuses</strong> émergent. Les organisations de la société civile, les ONG et des cabinets comme NovaLearn Afrique développent des approches innovantes, contextualisées et à impact mesurable.</p>
+<blockquote>La formation professionnelle n'est pas un luxe ; c'est un investissement stratégique pour le développement de l'Afrique.</blockquote>
+<p>Le développement de la formation à distance, l'implication des communautés locales et la valorisation des savoirs endogènes constituent des leviers puissants pour un avenir plus équitable.</p>`
+  }
+];
+
+function initDefaultPosts() {
+  if (!localStorage.getItem(KEYS.posts)) {
+    save(KEYS.posts, DEFAULT_POSTS);
+  }
+}
+
+let blogCurrentCat = 'all';
+
+function renderBlog() {
+  const posts = load(KEYS.posts);
+  const query = (document.getElementById('blog-search-input')?.value || '').toLowerCase();
+  const grid = document.getElementById('blog-grid');
+
+  let filtered = posts.filter(p => {
+    const matchCat = blogCurrentCat === 'all' || p.cat === blogCurrentCat;
+    const matchQuery = !query || p.title.toLowerCase().includes(query) || p.excerpt.toLowerCase().includes(query);
+    return matchCat && matchQuery;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Aucun article trouvé.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const cc = CAT_COLORS[p.cat] || { bg: 'rgba(200,245,106,0.1)', color: '#c8f56a' };
+    const date = new Date(p.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `<div class="blog-card" onclick="openBlogPost('${p.id}')">
+      <div class="blog-thumb" style="background:${cc.bg}">${p.icon || '📄'}</div>
+      <div class="blog-body">
+        <div class="blog-meta">
+          <span class="blog-cat" style="background:${cc.bg};color:${cc.color}">${CAT_LABELS[p.cat] || p.cat}</span>
+          <span class="blog-date">${date}</span>
+        </div>
+        <h3>${p.title}</h3>
+        <p>${p.excerpt}</p>
+        <span class="blog-read">Lire l'article →</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterBlog() { renderBlog(); }
+
+function filterBlogCat(cat, btn) {
+  blogCurrentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBlog();
+}
+
+function openBlogPost(id) {
+  const posts = load(KEYS.posts);
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+
+  const cc = CAT_COLORS[p.cat] || { bg: 'rgba(200,245,106,0.1)', color: '#c8f56a' };
+  const date = new Date(p.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  document.getElementById('post-meta').innerHTML = `
+    <span class="blog-cat" style="background:${cc.bg};color:${cc.color}">${CAT_LABELS[p.cat] || p.cat}</span>
+    <span class="blog-date">${date}</span>`;
+  document.getElementById('post-title').textContent = p.title;
+  document.getElementById('post-body').innerHTML = p.content;
+
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const bp = document.getElementById('blog-post');
+  bp.style.display = 'block';
+  bp.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function closeBlogPost() {
+  document.getElementById('blog-post').style.display = 'none';
+  document.getElementById('blog-post').classList.remove('active');
+  showPage('blog');
+}
+
+// ── ORDERS ──
+const DEFAULT_ORDERS = [
+  { id: 'NL-DEMO01', name: 'Amina Diallo', email: 'amina@exemple.bj', service: 'Analyse des besoins', amount: '120 000 FCFA', status: 'done', date: '2026-04-10', notes: 'Diagnostic réalisé pour 3 départements.' },
+  { id: 'NL-DEMO02', name: 'Kouassi Mensah', email: 'kouassi@exemple.bj', service: 'Formation de formateurs', amount: '250 000 FCFA', status: 'progress', date: '2026-05-05', notes: 'Session en cours, 12 participants.' },
+  { id: 'NL-DEMO03', name: 'Marie-Claire Agossa', email: 'marie@exemple.bj', service: 'Conception de programme', amount: '180 000 FCFA', status: 'pending', date: '2026-05-22', notes: 'En attente de validation du TDR.' },
+];
+
+function initDefaultOrders() {
+  if (!localStorage.getItem(KEYS.orders)) {
+    save(KEYS.orders, DEFAULT_ORDERS);
+  }
+}
+
+let ordersCurrentFilter = 'all';
+let ordersSearchQuery = '';
+
+function renderOrders() {
+  const orders = load(KEYS.orders);
+  const list = document.getElementById('orders-list');
+
+  let filtered = orders.filter(o => {
+    const matchFilter = ordersCurrentFilter === 'all' || o.status === ordersCurrentFilter;
+    const matchSearch = !ordersSearchQuery ||
+      o.email.toLowerCase().includes(ordersSearchQuery) ||
+      o.id.toLowerCase().includes(ordersSearchQuery) ||
+      o.name.toLowerCase().includes(ordersSearchQuery);
+    return matchFilter && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>Aucune commande trouvée.</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(o => {
+    const date = new Date(o.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+    const statusLabels = { pending: 'En attente', progress: 'En cours', done: 'Terminé', cancelled: 'Annulé' };
+    return `<div class="order-card">
+      <div class="order-id">${o.id}</div>
+      <div class="order-info">
+        <h4>${o.name}</h4>
+        <p>${o.service} · ${date}</p>
+        ${o.notes ? `<p style="margin-top:4px;font-style:italic">${o.notes}</p>` : ''}
+      </div>
+      <div class="order-status">
+        <span class="status-badge status-${o.status}">${statusLabels[o.status] || o.status}</span>
+        <span class="order-amount">${o.amount}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterOrders(f, btn) {
+  ordersCurrentFilter = f;
+  document.querySelectorAll('.otab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function searchOrders() {
+  ordersSearchQuery = document.getElementById('order-search').value.trim().toLowerCase();
+  renderOrders();
+}
+
+// ── ADMIN DASHBOARD ──
+function renderAdminDash() {
+  const orders = load(KEYS.orders);
+  const posts = load(KEYS.posts);
+
+  const total = orders.length;
+  const pending = orders.filter(o => o.status === 'pending').length;
+  const progress = orders.filter(o => o.status === 'progress').length;
+  const done = orders.filter(o => o.status === 'done').length;
+
+  document.getElementById('dash-grid').innerHTML = `
+    <div class="dash-card"><div class="dash-num">${total}</div><div class="dash-label">Commandes totales</div></div>
+    <div class="dash-card"><div class="dash-num" style="color:var(--gold)">${pending}</div><div class="dash-label">En attente</div></div>
+    <div class="dash-card"><div class="dash-num">${progress}</div><div class="dash-label">En cours</div></div>
+    <div class="dash-card"><div class="dash-num" style="color:var(--accent2)">${done}</div><div class="dash-label">Terminées</div></div>
+    <div class="dash-card"><div class="dash-num" style="color:#6abdf5">${posts.length}</div><div class="dash-label">Articles publiés</div></div>
+  `;
+
+  renderAdminOrders();
+  renderAdminBlog();
+}
+
+function renderAdminOrders() {
+  const orders = load(KEYS.orders);
+  const statusLabels = { pending: 'En attente', progress: 'En cours', done: 'Terminé', cancelled: 'Annulé' };
+  const tbody = document.getElementById('admin-orders-body');
+
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Aucune commande.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = orders.map(o => {
+    const date = new Date(o.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return `<tr>
+      <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--accent)">${o.id}</span></td>
+      <td><strong>${o.name}</strong><br><span style="color:var(--muted);font-size:0.78rem">${o.email}</span></td>
+      <td>${o.service}</td>
+      <td style="font-family:var(--font-mono);font-size:0.8rem;color:var(--muted)">${date}</td>
+      <td><strong>${o.amount}</strong></td>
+      <td><span class="status-badge status-${o.status}">${statusLabels[o.status]}</span></td>
+      <td>
+        <button class="action-btn action-edit" onclick="editOrder('${o.id}')">Éditer</button>
+        <button class="action-btn action-delete" onclick="deleteOrder('${o.id}')">Supprimer</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAdminBlog() {
+  const posts = load(KEYS.posts);
+  const tbody = document.getElementById('admin-blog-body');
+
+  if (posts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Aucun article.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = posts.map(p => {
+    const date = new Date(p.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const cc = CAT_COLORS[p.cat] || { bg: 'rgba(200,245,106,0.1)', color: '#c8f56a' };
+    return `<tr>
+      <td><strong style="color:var(--white)">${p.title}</strong></td>
+      <td><span class="blog-cat" style="background:${cc.bg};color:${cc.color}">${CAT_LABELS[p.cat] || p.cat}</span></td>
+      <td style="font-family:var(--font-mono);font-size:0.8rem;color:var(--muted)">${date}</td>
+      <td>
+        <button class="action-btn action-edit" onclick="editPost('${p.id}')">Éditer</button>
+        <button class="action-btn action-delete" onclick="deletePost('${p.id}')">Supprimer</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── ORDER EDITOR ──
+function openOrderEditor() {
+  document.getElementById('order-editor-title').textContent = 'Nouvelle commande';
+  document.getElementById('order-edit-id').value = '';
+  document.getElementById('oe-name').value = '';
+  document.getElementById('oe-email').value = '';
+  document.getElementById('oe-service').value = 'Analyse des besoins';
+  document.getElementById('oe-amount').value = '';
+  document.getElementById('oe-status').value = 'pending';
+  document.getElementById('oe-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('oe-notes').value = '';
+  document.getElementById('order-editor-overlay').classList.add('open');
+}
+
+function editOrder(id) {
+  const orders = load(KEYS.orders);
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  document.getElementById('order-editor-title').textContent = 'Modifier la commande';
+  document.getElementById('order-edit-id').value = id;
+  document.getElementById('oe-name').value = o.name;
+  document.getElementById('oe-email').value = o.email;
+  document.getElementById('oe-service').value = o.service;
+  document.getElementById('oe-amount').value = o.amount;
+  document.getElementById('oe-status').value = o.status;
+  document.getElementById('oe-date').value = o.date;
+  document.getElementById('oe-notes').value = o.notes || '';
+  document.getElementById('order-editor-overlay').classList.add('open');
+}
+
+function saveOrder() {
+  const id = document.getElementById('order-edit-id').value;
+  const data = {
+    id: id || uid(),
+    name: document.getElementById('oe-name').value.trim(),
+    email: document.getElementById('oe-email').value.trim(),
+    service: document.getElementById('oe-service').value,
+    amount: document.getElementById('oe-amount').value.trim() + (document.getElementById('oe-amount').value && !document.getElementById('oe-amount').value.includes('FCFA') ? ' FCFA' : ''),
+    status: document.getElementById('oe-status').value,
+    date: document.getElementById('oe-date').value,
+    notes: document.getElementById('oe-notes').value.trim(),
+  };
+
+  if (!data.name || !data.email) { toast('Nom et e-mail obligatoires.', 'error'); return; }
+
+  let orders = load(KEYS.orders);
+  if (id) {
+    orders = orders.map(o => o.id === id ? data : o);
+    toast('Commande mise à jour ✓');
+  } else {
+    orders.unshift(data);
+    toast('Commande ajoutée ✓');
+  }
+  save(KEYS.orders, orders);
+  closeOrderEditor();
+  renderAdminDash();
+}
+
+function deleteOrder(id) {
+  if (!confirm('Supprimer cette commande ?')) return;
+  let orders = load(KEYS.orders).filter(o => o.id !== id);
+  save(KEYS.orders, orders);
+  renderAdminDash();
+  toast('Commande supprimée.');
+}
+
+function closeOrderEditor() {
+  document.getElementById('order-editor-overlay').classList.remove('open');
+}
+
+// ── POST EDITOR ──
+function openPostEditor() {
+  document.getElementById('post-editor-title').textContent = 'Nouvel article';
+  document.getElementById('post-edit-id').value = '';
+  document.getElementById('pe-title').value = '';
+  document.getElementById('pe-cat').value = 'andragogie';
+  document.getElementById('pe-icon').value = '📝';
+  document.getElementById('pe-excerpt').value = '';
+  document.getElementById('pe-content').value = '';
+  document.getElementById('post-editor-overlay').classList.add('open');
+}
+
+function editPost(id) {
+  const posts = load(KEYS.posts);
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('post-editor-title').textContent = 'Modifier l\'article';
+  document.getElementById('post-edit-id').value = id;
+  document.getElementById('pe-title').value = p.title;
+  document.getElementById('pe-cat').value = p.cat;
+  document.getElementById('pe-icon').value = p.icon || '📝';
+  document.getElementById('pe-excerpt').value = p.excerpt;
+  document.getElementById('pe-content').value = p.content;
+  document.getElementById('post-editor-overlay').classList.add('open');
+}
+
+function savePost() {
+  const id = document.getElementById('post-edit-id').value;
+  const data = {
+    id: id || 'p' + Date.now(),
+    title: document.getElementById('pe-title').value.trim(),
+    cat: document.getElementById('pe-cat').value,
+    icon: document.getElementById('pe-icon').value.trim() || '📝',
+    excerpt: document.getElementById('pe-excerpt').value.trim(),
+    content: document.getElementById('pe-content').value.trim(),
+    date: new Date().toISOString().slice(0,10),
+  };
+
+  if (!data.title || !data.excerpt || !data.content) { toast('Titre, accroche et contenu obligatoires.', 'error'); return; }
+
+  let posts = load(KEYS.posts);
+  if (id) {
+    posts = posts.map(p => p.id === id ? data : p);
+    toast('Article mis à jour ✓');
+  } else {
+    posts.unshift(data);
+    toast('Article publié ✓');
+  }
+  save(KEYS.posts, posts);
+  closePostEditor();
+  renderAdminDash();
+}
+
+function deletePost(id) {
+  if (!confirm('Supprimer cet article ?')) return;
+  let posts = load(KEYS.posts).filter(p => p.id !== id);
+  save(KEYS.posts, posts);
+  renderAdminDash();
+  toast('Article supprimé.');
+}
+
+function closePostEditor() {
+  document.getElementById('post-editor-overlay').classList.remove('open');
+}
+
+// ── CONTACT FORM ──
+function sendContactForm() {
+  const name = document.getElementById('c-name').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const subject = document.getElementById('c-subject').value;
+  const message = document.getElementById('c-message').value.trim();
+  const alertEl = document.getElementById('contact-alert');
+
+  if (!name || !email || !subject || !message) {
+    alertEl.innerHTML = '<div class="alert alert-error">Veuillez remplir tous les champs obligatoires.</div>';
+    return;
+  }
+
+  // Save as order automatically
+  const orders = load(KEYS.orders);
+  orders.unshift({
+    id: uid(),
+    name,
+    email,
+    service: subject,
+    amount: 'À définir',
+    status: 'pending',
+    date: new Date().toISOString().slice(0,10),
+    notes: message.slice(0, 150),
+  });
+  save(KEYS.orders, orders);
+
+  alertEl.innerHTML = '<div class="alert alert-success">✓ Votre message a bien été enregistré. Nous vous répondrons dans les plus brefs délais.</div>';
+  document.getElementById('c-name').value = '';
+  document.getElementById('c-email').value = '';
+  document.getElementById('c-phone').value = '';
+  document.getElementById('c-subject').value = '';
+  document.getElementById('c-message').value = '';
+  toast('Message envoyé et commande créée ✓');
+}
+
+// ── CLOSE OVERLAYS ON BG CLICK ──
+document.getElementById('admin-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeAdminLogin();
+});
+document.getElementById('order-editor-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeOrderEditor();
+});
+document.getElementById('post-editor-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closePostEditor();
+});
+
+// ── INIT ──
+initDefaultPosts();
+initDefaultOrders();
+
+</script>
+</body>
+</html>
